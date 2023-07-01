@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "target": "ES2021",
+    "resolveJsonModule": true,
+    "resolvePackageJsonExports": false,
+    "rootDir": ".",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./src",
+    "esModuleInterop": true,                             /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": true,
+    //"noFallthroughCasesInSwitch": false,
+    "strict": true,
+  }
+}
