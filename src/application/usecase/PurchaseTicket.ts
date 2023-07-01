@@ -5,39 +5,31 @@ import EventRepository from 'application/repository/EventRepository';
 import PaymentGateway from 'application/gateway/PaymentGateway';
 import Transaction from 'domain/entities/Transaction';
 import TransactionRepository from 'application/repository/TransictionRepository';
+import ProcessPayment from './ProcessPayment';
 
 export default class PurchaseTicket {
   ticketRepository: TicketRepository;
   eventRepository: EventRepository;
-  paymentGateway: PaymentGateway;
-  transactionRepository: TransactionRepository;
+  processPayment: ProcessPayment;
 
   constructor(readonly registry: Registry) {
     this.ticketRepository = registry.inject('ticketRepository');
     this.eventRepository = registry.inject('eventRepository');
-    this.paymentGateway = registry.inject('paymentGateway');
-    this.transactionRepository = registry.inject('transactionRepository');
+    this.processPayment = registry.inject('processPayment');
   }
 
   async execute(input: input): Promise<Output> {
     const event = await this.eventRepository.get(input.eventId);
     const ticket = Ticket.create(input.eventId, input.email);
     await this.ticketRepository.save(ticket);
-    const output = await this.paymentGateway.createTransaction({
-      email: input.email,
+    const inputProcess = {
+      ticketId: ticket.ticketId,
+      eventId: event.eventId,
+      email: ticket.email,
       price: event.price,
       creditCardToken: input.creditCardToken,
-    });
-    const transaction = Transaction.create(
-      ticket.ticketId,
-      event.eventId,
-      output.tid,
-      event.price,
-      output.status,
-    );
-
-    await this.transactionRepository.save(transaction);
-
+    };
+    const output = await this.processPayment.execute(inputProcess);
     // processar o cartao de credito, criar e salvar transação mandar email com ticket
     if (output.status === 'approved') {
       ticket.approved();
@@ -46,12 +38,12 @@ export default class PurchaseTicket {
     }
 
     await this.ticketRepository.update(ticket);
-
+    
     return {
       ticketId: ticket.ticketId,
       status: ticket.getStatus,
-      tid: transaction.tid,
-      price: transaction.price,
+      tid: output.tid,
+      price: output.price,
     };
   }
 }

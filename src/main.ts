@@ -6,6 +6,7 @@ import PurchaseTicket from './application/usecase/PurchaseTicket';
 import EventRepositoryDatabase from 'infra/repository/EventRepositoryDatabase';
 import PagarmePaymentGateway from 'infra/gateway/PagarmePaymentGateway';
 import TransactionRepositoryDatabase from 'infra/repository/TransactionRepositoryDatabase';
+import ProcessPayment from 'application/usecase/ProcessPayment';
 
 const app = express();
 
@@ -13,7 +14,7 @@ const PORT = 3000;
 
 app.use(express.json());
 
-app.post('/purchase_ticket', async (req: Request, res: Response) => {
+app.post('/ticket/purchase_ticket', async (req: Request, res: Response) => {
   const registry = new Registry();
   registry.provide('ticketRepository', new TicketRepositoryDatabase());
   registry.provide('eventRepository', new EventRepositoryDatabase());
@@ -22,6 +23,8 @@ app.post('/purchase_ticket', async (req: Request, res: Response) => {
     'transactionRepository',
     new TransactionRepositoryDatabase(),
   );
+
+  registry.provide('processPayment', new ProcessPayment(registry));
 
   const purchaseTicket = new PurchaseTicket(registry);
   const output = await purchaseTicket.execute(req.body);
