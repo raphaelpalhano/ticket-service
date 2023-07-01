@@ -2,9 +2,6 @@ import TicketRepository from '../repository/TicketRepository';
 import Ticket from '../../domain/entities/Ticket';
 import Registry from 'infra/registry/Registry';
 import EventRepository from 'application/repository/EventRepository';
-import PaymentGateway from 'application/gateway/PaymentGateway';
-import Transaction from 'domain/entities/Transaction';
-import TransactionRepository from 'application/repository/TransictionRepository';
 import ProcessPayment from './ProcessPayment';
 
 export default class PurchaseTicket {
@@ -38,7 +35,7 @@ export default class PurchaseTicket {
     }
 
     await this.ticketRepository.update(ticket);
-    
+
     return {
       ticketId: ticket.ticketId,
       status: ticket.getStatus,
