@@ -1,7 +1,7 @@
-import Registry from 'infra/registry/Registry';
-import PaymentGateway from 'application/gateway/PaymentGateway';
-import Transaction from 'domain/entities/Transaction';
-import TransactionRepository from 'application/repository/TransictionRepository';
+import Transaction from '../../domain/entities/Transaction';
+import Registry from '../../infra/registry/Registry';
+import PaymentGateway from '../gateway/PaymentGateway';
+import TransactionRepository from '../repository/TransictionRepository';
 
 export default class ProcessPayment {
   paymentGateway: PaymentGateway;

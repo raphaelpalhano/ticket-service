@@ -1,6 +1,6 @@
+import TransactionRepository from '../../application/repository/TransictionRepository';
 import { connection } from '../../core/helper/connection-db';
-import TransactionRepository from 'application/repository/TransictionRepository';
-import Transaction from 'domain/entities/Transaction';
+import Transaction from '../../domain/entities/Transaction';
 
 export default class TransactionRepositoryDatabase
   implements TransactionRepository

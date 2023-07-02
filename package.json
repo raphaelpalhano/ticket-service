@@ -21,6 +21,7 @@
     "test:unit:watch": "npm run test:watch -- -c jest-unit.config.ts --coverage"
   },
   "dependencies": {
+    "amqplib": "^0.10.3",
     "axios": "^1.4.0",
     "express": "^4.18.2",
     "pg-promise": "^11.5.0",
@@ -30,6 +31,7 @@
     "testcontainers": "^9.9.1"
   },
   "devDependencies": {
+    "@types/amqplib": "^0.10.1",
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.2",
     "@types/node": "^20.3.1",

@@ -1,6 +1,6 @@
-import TicketRepository from 'application/repository/TicketRepository';
-import Ticket from 'domain/entities/Ticket';
+import TicketRepository from '../../application/repository/TicketRepository';
 import { connection } from '../../core/helper/connection-db';
+import Ticket from '../../domain/entities/Ticket';
 
 export default class TicketRepositoryDatabase implements TicketRepository {
   async save(ticket: Ticket): Promise<void> {
