@@ -41,6 +41,6 @@ export async function main() {
   server.listen(PORT, () => {
     console.log(`Server up in PORT: ${PORT}`);
   });
-}
 
-main().catch((error) => console.error(error));
+  return app;
+}
