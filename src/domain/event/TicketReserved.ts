@@ -4,7 +4,5 @@ export default class TicketReserved {
     readonly eventId: string,
     readonly creditCardToken: string,
     readonly price: number,
-  ) {
-    Object.assign(this);
-  }
+  ) {}
 }

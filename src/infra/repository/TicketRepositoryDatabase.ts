@@ -24,4 +24,22 @@ export default class TicketRepositoryDatabase implements TicketRepository {
 
     await db.$pool.end();
   }
+
+  async get(ticketId: string): Promise<Ticket> {
+    const db = connection();
+
+    const [ticketData] = await db.query(
+      'select * from tickect_broker.ticket where ticket_id = $1',
+      [ticketId],
+    );
+
+    await db.$pool.end();
+
+    return new Ticket(
+      ticketData.ticket_id,
+      ticketData.event_id,
+      ticketData.email,
+      ticketData.status,
+    );
+  }
 }

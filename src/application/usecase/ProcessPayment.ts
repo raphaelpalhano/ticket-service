@@ -1,4 +1,6 @@
 import Transaction from '../../domain/entities/Transaction';
+import PaymentApproved from '../../domain/event/PaymentApproved';
+import Queue from '../../infra/queue/Queue';
 import Registry from '../../infra/registry/Registry';
 import PaymentGateway from '../gateway/PaymentGateway';
 import TransactionRepository from '../repository/TransictionRepository';
@@ -6,13 +8,15 @@ import TransactionRepository from '../repository/TransictionRepository';
 export default class ProcessPayment {
   paymentGateway: PaymentGateway;
   transactionRepository: TransactionRepository;
+  queue: Queue;
 
   constructor(readonly registry: Registry) {
     this.paymentGateway = registry.inject('paymentGateway');
     this.transactionRepository = registry.inject('transactionRepository');
+    this.queue = registry.inject('queue');
   }
 
-  async execute(input: input): Promise<Output> {
+  async execute(input: input): Promise<void> {
     const output = await this.paymentGateway.createTransaction({
       email: input.email,
       price: input.price,
@@ -28,11 +32,10 @@ export default class ProcessPayment {
 
     await this.transactionRepository.save(transaction);
 
-    return {
-      tid: transaction.tid,
-      price: transaction.price,
-      status: output.status,
-    };
+    if (output.status === 'approved') {
+      const paymentApproved = new PaymentApproved(input.ticketId);
+      this.queue.publish('paymentApproved', paymentApproved);
+    }
   }
 }
 
@@ -40,12 +43,6 @@ type input = {
   ticketId: string;
   price: number;
   eventId: string;
-  email: string;
+  email?: string;
   creditCardToken: string;
-};
-
-type Output = {
-  tid: string;
-  price: number;
-  status: string;
 };

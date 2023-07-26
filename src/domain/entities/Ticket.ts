@@ -1,7 +1,7 @@
 import crypto from 'node:crypto';
 
 export default class Ticket {
-  private constructor(
+  constructor(
     readonly ticketId: string,
     readonly eventId: string,
     readonly email: string,

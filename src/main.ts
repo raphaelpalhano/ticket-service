@@ -9,6 +9,8 @@ import TransactionRepositoryDatabase from './infra/repository/TransactionReposit
 import ProcessPayment from './application/usecase/ProcessPayment';
 import RabbitMQAdapter from './infra/queue/RabbitMQAdapter';
 import { PORT } from './core/constants/server.constants';
+import QueueController from './infra/queue/QueueController';
+import ApproveTicket from './application/usecase/ApproveTicket';
 
 export async function main() {
   const app = express();
@@ -20,6 +22,7 @@ export async function main() {
   await queue.connect();
 
   const registry = new Registry();
+  registry.provide('queue', queue);
   registry.provide('ticketRepository', new TicketRepositoryDatabase());
   registry.provide('eventRepository', new EventRepositoryDatabase());
   registry.provide('paymentGateway', new PagarmePaymentGateway());
@@ -28,8 +31,9 @@ export async function main() {
     new TransactionRepositoryDatabase(),
   );
   registry.provide('processPayment', new ProcessPayment(registry));
-  registry.provide('queue', queue);
+  registry.provide('approveTicket', new ApproveTicket(registry));
 
+  new QueueController(registry);
   app.post('/ticket/purchase_ticket', async (req: Request, res: Response) => {
     const purchaseTicket = new PurchaseTicket(registry);
     const output = await purchaseTicket.execute(req.body);

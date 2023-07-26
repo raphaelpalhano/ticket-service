@@ -22,6 +22,7 @@ export default class PurchaseTicket {
   async execute(input: input): Promise<Output> {
     const event = await this.eventRepository.get(input.eventId);
     const ticket = Ticket.create(input.eventId, input.email);
+    await this.ticketRepository.save(ticket);
     const ticketReserved = new TicketReserved(
       ticket.ticketId,
       event.eventId,
@@ -32,25 +33,6 @@ export default class PurchaseTicket {
     return {
       ticketId: ticket.ticketId,
     };
-    /*
-    await this.ticketRepository.save(ticket);
-    const inputProcess = {
-      ticketId: ticket.ticketId,
-      eventId: event.eventId,
-      email: ticket.email,
-      price: event.price,
-      creditCardToken: input.creditCardToken,
-    };
-    const output = await this.processPayment.execute(inputProcess);
-    // processar o cartao de credito, criar e salvar transação mandar email com ticket
-    if (output.status === 'approved') {
-      ticket.approved();
-    } else {
-      ticket.cancel();
-    }
-
-    await this.ticketRepository.update(ticket);
-    */
   }
 }
 
