@@ -1,6 +1,6 @@
-import EventRepository from 'application/repository/EventRepository';
-import { connection } from 'core/helper/connection-db';
-import Event from 'domain/entities/Event';
+import EventRepository from '../../application/repository/EventRepository';
+import { connection } from '../../core/helper/connection-db';
+import Event from '../../domain/entities/Event';
 
 export default class EventRepositoryDatabase implements EventRepository {
   async get(eventId: string): Promise<Event> {

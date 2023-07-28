@@ -12,7 +12,6 @@
     "rootDir": ".",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./src",
     "esModuleInterop": true,                             /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
     "incremental": true,
     "skipLibCheck": true,

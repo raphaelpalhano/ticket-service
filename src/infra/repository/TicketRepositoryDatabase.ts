@@ -1,6 +1,6 @@
-import TicketRepository from 'application/repository/TicketRepository';
-import Ticket from 'domain/entities/Ticket';
+import TicketRepository from '../../application/repository/TicketRepository';
 import { connection } from '../../core/helper/connection-db';
+import Ticket from '../../domain/entities/Ticket';
 
 export default class TicketRepositoryDatabase implements TicketRepository {
   async save(ticket: Ticket): Promise<void> {
@@ -23,5 +23,23 @@ export default class TicketRepositoryDatabase implements TicketRepository {
     );
 
     await db.$pool.end();
+  }
+
+  async get(ticketId: string): Promise<Ticket> {
+    const db = connection();
+
+    const [ticketData] = await db.query(
+      'select * from tickect_broker.ticket where ticket_id = $1',
+      [ticketId],
+    );
+
+    await db.$pool.end();
+
+    return new Ticket(
+      ticketData.ticket_id,
+      ticketData.event_id,
+      ticketData.email,
+      ticketData.status,
+    );
   }
 }

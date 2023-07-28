@@ -1,4 +1,7 @@
 import pgp from 'pg-promise';
+import * as env from 'dotenv';
+
+env.config();
 
 export const connection = () => {
   if (!global.DB_DATA) {

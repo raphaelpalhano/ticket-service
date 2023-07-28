@@ -1,7 +1,7 @@
 import PaymentGateway, {
   Input,
   Output,
-} from 'application/gateway/PaymentGateway';
+} from '../../application/gateway/PaymentGateway';
 
 export default class PagarmePaymentGateway implements PaymentGateway {
   async createTransaction(input: Input): Promise<Output> {
